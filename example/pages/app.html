@@ -1,0 +1,296 @@
+<template route="/" preventPop="true">
+    <appbody>
+        <indexedStack name="appIndexedStack">
+            <page route="/home"></page>
+            <page route="/message" ></page>
+            <page route="/index"></page>
+            <page route="/profile" ></page>
+		</indexedStack>
+    </appbody>
+    <bottomNavigationBar name="appBottomNavBar" selectedItemColor="blue" unselectedItemColor="#888888">
+        <barItem>
+			<icon code="0xe800"  size="22" fontFamily="lnr"></icon>
+			<text>首页2</text>
+		</barItem>
+        <barItem bgColor="blue">
+			<icon v-on:doubleTap="toTop"  code="0xe872"  size="22" fontFamily="lnr"></icon>
+			<text >组件</text>
+		</barItem>
+        <barItem>
+            <icon code="0xe803" size="24" fontFamily="lnr"></icon>
+            <text>模板</text>
+        </barItem>
+        <barItem>
+            <icon code="0xe890"  size="24" fontFamily="lnr"></icon>
+            <text>JS</text>
+        </barItem>
+    </bottomNavigationBar>
+    <script>
+        
+        var btNavBar = T.getBottomNavBar("appBottomNavBar");
+        var indexStack = T.getIndexedStack("appIndexedStack");
+        indexStack.onChange = function(data){
+            // console.log(data);
+        };
+        btNavBar.onChange = function(data){
+            indexStack.changeIndex(data.index);
+        };
+        // // T.toPage("home",null,{
+        // //     "title":"hello"
+        // // });
+        // // T.openPage("https://app.hong.work",{"fr":"otherApp"},{
+        // //     "title":"找工作"
+        // // });
+        // setTimeout(function(){
+        //     T.openPageByName("/home");
+        // },20000);
+
+        // var a = await T.openPage("https://app.hong.work",null,null,"/home");
+        // console.log("back data is "+a);
+        
+        // 双击底部菜单回到顶部
+        function toTop(){
+            T.broadcast("page.message.toTop");
+        }
+    </script>
+</template>
+
+<template route="/home">
+    <appbar>
+        <leading>
+            <icon name="list" size="24" color="white"></icon>
+        </leading>
+        <atitle><text>home</text></atitle>
+        <actions>
+            <center>
+                <row>
+                    <icon name="help" size="24" color="white"></icon>
+                    <size width="5"></size>
+                    <icon name="message" size="24" color="white"></icon>
+                    <size width="15"></size>
+                </row>
+            </center>
+        </actions>
+    </appbar>
+    <appbody>
+        <column style="padding: 15;" main-axis="start" cross-axis="start">
+            <text>This is home page.</text>
+            <text>This is home page2.</text>
+            <text style="line-height:1.5;font-size:16;font-weight: bold;">This is home page2.This is home page2.This is home page2.This is home page2.This is home page2.</text>
+            <img v-on:tap="openPage" src="https://imagepphcloud.thepaper.cn/pph/image/170/263/155.jpg"></img>
+        </column>
+    </appbody>
+    <script>
+        function openPage(){
+            T.openPageByName('/work/detail',null,{'title':'hihihihi','work':{"name":"asdfasd"}});
+        }
+    </script>
+</template>
+
+<template route="/message">
+    <appbar elevation="0">
+        <atitle><text v-on:doubleTap="toTop">消息</text></atitle>
+    </appbar>
+    <appbody>
+        <refresh  backgroundColor="blue" messageStyle="color:#f1f1f1" textStyle="color:white" iconTheme="color:white" name="test.refresh">
+            <list physics="true" builder="true" name="test.list">
+                {{if item_index==0}}
+                <text style="font-weight: bold;padding:15;font-size:18">{{title}}</text>
+                {{else}}
+                <row v-on:tap="T.openPageByName('/work/detail')" style="background-color: white;padding:15;border-bottom: 0.5 #dddddd;{{if item_index==1}}border-top:0.5 #dddddd;{{/if}}">
+                    <container decoration="color:#f9f9f9;" style="border-radius: 5;" padding="2" width="52" height="52">
+                        <img style="border-radius: 5;" fit="cover" src="https://c-ssl.duitang.com/uploads/item/201303/03/20130303153757_tNmft.thumb.1000_0.jpeg"></container>
+                    </container>
+                    <size width="8"></size>
+                    <expanded>
+                        <column cross-align="start">
+                            <text style="font-weight: bold;font-size: 18;">{{item_index}}-{{title}}</text>
+                            <text style="color:#666666">1天前：贵阳本地寒假工报名开始，手慢无！</text>
+                        </column>
+                    </expanded>
+                </row>
+                {{/if}}
+            </list>
+        </refresh>
+    </appbody>
+    <script>
+        var refresh = T.getRefresh("test.refresh");
+        var defaultData = [
+            {
+                "title":"第一条数据做为标题来使用"
+            },
+            { 
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            },
+            {
+                "title":"我是第二行"
+            }
+        ];
+        var list = T.getListView("test.list",defaultData);
+
+        refresh.onLoad = function(){
+            console.log("onloading....");
+            setTimeout(function(){
+                list.add([
+                {
+                    "title":"这是加载的数据"
+                },
+                {
+                    "title":"这是加载的数据"
+                },
+                {
+                    "title":"这是加载的数据"
+                },
+                {
+                    "title":"这是加载的数据"
+                },
+                {
+                    "title":"这是加载的数据"
+                },
+                {
+                    "title":"这是加载的数据"
+                }
+            ]);
+                console.log("loaded.");
+            },500);
+            
+            
+            // refresh.finishLoad(true,true); 
+        }
+
+        refresh.onRefresh = function(){
+            list.replaceAll(defaultData);
+            refresh.finishRefresh();
+        }
+
+        // 鉴定APP事件，滚动到顶部
+        T.subscribe("page.message.toTop",toTop);
+        // 滚动到顶部
+        function toTop(){
+            list.animateTo(0);
+        }
+    </script>
+</template>
+
+<template route="/index">
+    <appbar>
+        <atitle><text>index</text></atitle>
+    </appbar>
+    <appbody>
+        <container>
+            <column>
+                <input  placeholder="请在这里输入" name="test" onChanged="saveTitle" />
+                <x:text id="testWidget" style="color:green">${title}--${name}</x:text>
+            </column>
+        </container>
+    </appbody>
+    <script type="data/json" id="testWidget">
+        {
+            "title":"请输入标题",
+            "name":"【test】"
+        }
+    </script>
+    <script>
+        var xtxt = T.getXWidget('testWidget');
+        function saveTitle(value){
+            xtxt.set("title",value);
+        }
+        
+    </script>
+</template>
+
+<template route="/profile">
+    <appbar>
+        <atitle><text>profile</text></atitle>
+    </appbar>
+    <appbody>
+        <jswidget dataId="profile" include="profile.tpl">
+            {   
+                "isLogin":false
+            }
+        </jswidget>
+    </appbody>
+    <script type="data/json" id="profile">
+        {
+            
+        }
+    </script>
+    <script type="text/template" id="profile.tpl">
+        {{if isLogin}}
+        <text>已登录</text>
+        {{else}}
+        <text>请登录</text>
+        {{/if}}
+    </script>
+</template>
+
+<template route="/work/detail">
+    <appbar>
+        <atitle><x:text id="ssstitle">${title|default:岗位详情}</x:text></atitle>
+    </appbar>
+    <appbody>
+        <x:builder id="page">
+            {{if work}}
+            <text>这是我的家！{{work.name}}</text>
+            {{else}}
+            <text>岗位已下线或被删除.</text>
+            {{/if}}
+        </x:builder>
+    </appbody>
+    
+    <script>
+
+        var pageData = T.pageData;
+        
+        // var args = T.getArguments();
+        var pageWidget = T.getXBuilder("page");
+        var pageTitle = T.getXWidget("ssstitle");
+       
+        pageWidget.ready(function(){
+            // console.log("page is ready!");
+            if(pageData && pageData.work){
+                pageWidget.set("work",pageData.work);
+            }
+        });
+
+        pageTitle.ready(function(){
+            // console.log("title is ready!");
+            // console.log(pageData);
+            if(pageData && pageData.title){
+                pageTitle.set("title",pageData.title);
+            }
+        });
+
+    </script>
+</template>
+
